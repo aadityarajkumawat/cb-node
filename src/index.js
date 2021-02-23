@@ -9,5 +9,14 @@ const program = new Command();
 
 (async () => {
   const files = await fsPromises.readdir("../repo");
-  console.log(files);
+  for (let i = 0; i < 5; i++) {
+    if (files[i] !== "src") {
+      console.log(files[i]);
+      fs.createWriteStream(`../copyrepo/${files[i]}`);
+      await fsPromises.copyFile(
+        `../repo/${files[i]}`,
+        `../copyrepo/${files[i]}`
+      );
+    }
+  }
 })().catch(console.error);
