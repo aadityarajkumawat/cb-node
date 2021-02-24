@@ -28,8 +28,8 @@ program
 
       const files = await fsPromises.readdir(repoPath);
 
-      for (let i = 0; i < 5; i++) {
-        if (files[i] !== "src") {
+      for (let i = 0; i < 6; i++) {
+        if (files[i] !== "src" && files[i] !== undefined) {
           fs.createWriteStream(
             path.join(process.cwd(), `/${newFolder}/${files[i]}`)
           );
@@ -40,7 +40,7 @@ program
           );
         }
         // This is a directory
-        else if (files[i] == "src") {
+        else if (files[i] == "src" && files[i] !== undefined) {
           fs.mkdir(path.join(process.cwd(), `/${newFolder}/src`), (e) => {
             if (e) throw new Error(e.message);
           });
@@ -55,10 +55,10 @@ program
         }
       }
 
-      childProcess.exec("git init");
+      // childProcess.exec("git init");
       console.log("Initialized as a git repository");
       console.log("Installing dependencies using npm");
-      childProcess.exec("npm install");
+      // childProcess.exec("npm install");
 
       if (newFolder === ".") {
       } else {
@@ -69,3 +69,5 @@ program
   });
 
 program.parse();
+
+// childProcess.exec("touch in.js", { cwd: path.join(process.cwd, "repo") });
