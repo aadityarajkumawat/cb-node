@@ -3,13 +3,13 @@
 const { Command } = require("commander");
 const fsPromises = require("fs").promises;
 const fs = require("fs");
+const childProcess = require("child_process");
 
 const fsExtra = require("fs-extra");
 const path = require("path");
 
 const program = new Command();
 const repoPath = path.resolve(__dirname, "repo");
-// console.log(repoPath);
 // cool
 
 program
@@ -54,6 +54,17 @@ program
           );
         }
       }
+
+      childProcess.exec("git init");
+      console.log("Initialized as a git repository");
+      console.log("Installing dependencies using npm");
+      childProcess.exec("npm install");
+
+      if (newFolder === ".") {
+      } else {
+        console.log(`cd ${newFolder}`);
+      }
+      console.log("Start server by 'yarn watch' and 'yarn dev1'");
     })().catch(console.error);
   });
 
