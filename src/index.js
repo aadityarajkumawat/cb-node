@@ -55,10 +55,10 @@ program
         }
       }
 
-      // childProcess.exec("git init");
+      childProcess.exec(`cd ${newFolder} && git init`);
       console.log("Initialized as a git repository");
       console.log("Installing dependencies using npm");
-      // childProcess.exec("npm install");
+      childProcess.exec(`cd ${newFolder} && npm install`);
 
       if (newFolder === ".") {
       } else {
@@ -69,5 +69,3 @@ program
   });
 
 program.parse();
-
-// childProcess.exec("touch in.js", { cwd: path.join(process.cwd, "repo") });
