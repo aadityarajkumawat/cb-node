@@ -5,6 +5,7 @@ const fs = require("fs");
 const { Command } = require("commander");
 const program = new Command();
 const newFolder = "copyrepo";
+const fsExtra = require("fs-extra");
 // cool
 
 (async () => {
@@ -26,8 +27,9 @@ const newFolder = "copyrepo";
       fs.mkdir(`../${newFolder}/src`, (e) => {
         if (e) throw new Error(e.message);
       });
-      const srcFiles = await fsPromises.readdir("../repo/src");
-      console.log(srcFiles);
+      // const srcFiles = await fsPromises.readdir("../repo/src");
+      // console.log(srcFiles);
+      fsExtra.copySync("../repo/src", "../copyrepo/src", { overwrite: true });
     }
   }
 })().catch(console.error);
