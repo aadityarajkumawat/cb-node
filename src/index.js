@@ -5,6 +5,8 @@ const fs = require("fs");
 const { Command } = require("commander");
 const program = new Command();
 const fsExtra = require("fs-extra");
+const path = require("path");
+const repoPath = path.resolve(__dirname, "repo");
 // cool
 
 program
@@ -15,28 +17,33 @@ program
   })
   .action((newFolder) => {
     (async () => {
-      fs.mkdir(`../${newFolder}`, (e) => {
+      fs.mkdir(path.join(process.cwd(), `/${newFolder}`), (e) => {
         if (e) throw new Error(e.message);
       });
-      const files = await fsPromises.readdir("../repo");
+      const files = await fsPromises.readdir(repoPath);
       for (let i = 0; i < 5; i++) {
         if (files[i] !== "src") {
-          fs.createWriteStream(`../${newFolder}/${files[i]}`);
+          fs.createWriteStream(
+            path.join(process.cwd(), `/${newFolder}/${files[i]}`)
+          );
           await fsPromises.copyFile(
-            `../repo/${files[i]}`,
-            `../${newFolder}/${files[i]}`
+            path.join(repoPath, `/${files[i]}`),
+            path.join(process.cwd(), `/${newFolder}/${files[i]}`)
           );
         }
         // This is a directory
         else if (files[i] == "src") {
-          fs.mkdir(`../${newFolder}/src`, (e) => {
+          fs.mkdir(path.join(process.cwd(), `/${newFolder}/src`), (e) => {
             if (e) throw new Error(e.message);
           });
-          // const srcFiles = await fsPromises.readdir("../repo/src");
-          // console.log(srcFiles);
-          fsExtra.copySync("../repo/src", `../${newFolder}/src`, {
-            overwrite: true,
-          });
+
+          fsExtra.copySync(
+            path.join(repoPath, "/src"),
+            path.join(process.cwd(), `/${newFolder}/src`),
+            {
+              overwrite: true,
+            }
+          );
         }
       }
     })().catch(console.error);
