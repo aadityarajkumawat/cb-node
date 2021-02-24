@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
+const { Command } = require("commander");
 const fsPromises = require("fs").promises;
 const fs = require("fs");
-const { Command } = require("commander");
-const program = new Command();
+
 const fsExtra = require("fs-extra");
 const path = require("path");
+
+const program = new Command();
 const repoPath = path.resolve(__dirname, "repo");
+// console.log(repoPath);
 // cool
 
 program
@@ -17,15 +20,20 @@ program
   })
   .action((newFolder) => {
     (async () => {
-      fs.mkdir(path.join(process.cwd(), `/${newFolder}`), (e) => {
-        if (e) throw new Error(e.message);
-      });
+      if (newFolder !== ".") {
+        fs.mkdir(path.join(process.cwd(), `/${newFolder}`), (e) => {
+          if (e) throw new Error(e.message);
+        });
+      }
+
       const files = await fsPromises.readdir(repoPath);
+
       for (let i = 0; i < 5; i++) {
         if (files[i] !== "src") {
           fs.createWriteStream(
             path.join(process.cwd(), `/${newFolder}/${files[i]}`)
           );
+
           await fsPromises.copyFile(
             path.join(repoPath, `/${files[i]}`),
             path.join(process.cwd(), `/${newFolder}/${files[i]}`)
